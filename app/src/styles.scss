@@ -1,0 +1,26 @@
+/* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+body {
+  font-family: var(--font-family);
+}
+
+.flex{
+  display: flex;
+
+  &-column{
+    flex-flow: column nowrap;
+  }
+
+  &-space_between{
+    justify-content: space-between;
+  }
+  &-justify_center{
+    justify-content: center;
+  }
+  &-align_center{
+    align-items: center;
+  }
+}
+

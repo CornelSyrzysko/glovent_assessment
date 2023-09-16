@@ -1,0 +1,37 @@
+<h2 *ngIf="isUpdate">EDIT PROPERTY DETAILS</h2>
+<h2 *ngIf="!isUpdate">ADD A NEW PROPERTY</h2>
+
+<form [formGroup]="propertyForm">
+
+  <div class="flex flex-column">
+    <label>Description</label>
+    <textarea rows="5" cols="30" pInputTextarea  formControlName="description"></textarea>
+  </div>
+
+  <div class="flex flex-column">
+    <label>Unit</label>
+    <input pInputText formControlName="unit">
+  </div>
+  <div class="flex flex-column">
+    <label>Property Type</label>
+    <p-dropdown [options]="propertyTypes" formControlName="propertyType"></p-dropdown>
+  </div>
+  <div class="flex flex-column">
+    <label>Stand Size</label>
+    <p-inputNumber formControlName="standSize" inputId="minmaxfraction" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"> </p-inputNumber>
+  </div>
+  <div class="flex flex-column">
+    <label>Property Size</label>
+    <p-inputNumber formControlName="propertySize" inputId="minmaxfraction" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"> </p-inputNumber>
+  </div>
+  <div class="flex flex-column">
+    <label>Address</label>
+    <input pInputText formControlName="address">
+  </div>
+
+  <google-map [options]="mapOptions">
+    <map-marker [position]="marker.position"></map-marker>
+ </google-map>
+
+
+</form>
