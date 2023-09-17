@@ -20,6 +20,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { FileUploadModule } from 'primeng/fileupload';
+import { ImageModule } from 'primeng/image';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 
 import { DynamicDialogModule, DialogService } from 'primeng/dynamicdialog';
 import { ConfirmationService } from 'primeng/api';
@@ -29,6 +32,12 @@ import { CamelToTitlePipe } from './helpers/camel-to-title.pipe';
 import { LoaderComponent } from './components/loader/loader.component';
 import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
 import { BackButtonDirective } from './directives/back-button.directive';
+// import { AngularFireModule } from '@angular/fire/compat';
+// import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+// import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+// import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+
+
 
 
 @NgModule({
@@ -51,6 +60,10 @@ import { BackButtonDirective } from './directives/back-button.directive';
     ReactiveFormsModule,
     RouterModule,
     GoogleMapsModule,
+    // AngularFireModule.initializeApp(environment.firebaseConfig),
+    // AngularFireDatabaseModule,
+    // AngularFirestoreModule,
+    // AngularFireStorageModule,
 
     //all primeNG Modules
     TableModule,
@@ -61,7 +74,10 @@ import { BackButtonDirective } from './directives/back-button.directive';
     InputTextareaModule,
     ConfirmDialogModule,
     DynamicDialogModule,
-    FileUploadModule
+    FileUploadModule,
+    ImageModule,
+    MessagesModule,
+    MessageModule,
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

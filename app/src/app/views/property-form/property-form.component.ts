@@ -7,8 +7,10 @@ import { PropertyType } from '../../models/property';
 import {} from 'googlemaps';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { ErrorDialogService } from 'src/app/components/error-dialog/error-dialog.service';
-import { FileBeforeUploadEvent, FileSelectEvent, FileUploadEvent } from 'primeng/fileupload';
+import { FileSelectEvent } from 'primeng/fileupload';
 import { MessageService } from 'primeng/api';
+import { GeocodingService } from 'src/app/services/geocoding.service';
+import { GeocoderResponse } from 'src/app/models/geocoder_response';
 
 interface UploadEvent {
   originalEvent: Event;
@@ -32,26 +34,28 @@ export class PropertyFormComponent {
     "Office"
   ];
 
-  chosenImage?: File;
+  chosenImage?: string;
 
-  // we'll be using the same page for update and add.
+  // we'll be using the same component for update and add.
   // variable to control certain elements depending on state
   isUpdate: boolean = true;
 
   mapOptions: google.maps.MapOptions = {
-    center: { lat: 38.9987208, lng: -77.2538699 },
+    center: { lat: -25.86453495678822, lng: 28.08851699601208 },
     zoom : 14
   }
-  marker = {
-    position: { lat: 38.9987208, lng: -77.2538699 },
-  }
+  marker: any;
+
+  geocoder?: google.maps.Geocoder;
 
   constructor(private route: ActivatedRoute,
     private dataService: DataService,
     private messageService: MessageService,
     private loader: LoaderService,
     private errorDialog: ErrorDialogService,
-    private router: Router){}
+    private router: Router,
+    private geocodingService: GeocodingService
+  ){}
 
   ngOnInit() {
     this.propertyId = this.route.snapshot.paramMap.get('id')?? undefined;
@@ -105,7 +109,7 @@ export class PropertyFormComponent {
   }
 
   submitProperty() {
-    if (this.propertyForm.valid) {
+    if (this.propertyForm.valid && this.marker != undefined) {
       if (this.isUpdate) {
         this.updateProperty();
       } else {
@@ -124,6 +128,8 @@ export class PropertyFormComponent {
     this.property.stand_size = this.propertyForm.controls['standSize'].value;
     this.property.unit_identifier = this.propertyForm.controls['unit'].value;
     this.property.property_type = this.propertyForm.controls['propertyType'].value;
+    this.property.gps_lat = this.marker.position.lat;
+    this.property.gps_lang = this.marker.position.lng;
 
     this.loader.showLoader();
     this.dataService.updateProperty(this.property).subscribe({
@@ -147,28 +153,50 @@ export class PropertyFormComponent {
       this.propertyForm.controls['address'].value,
       this.propertyForm.controls['unit'].value,
       this.propertyForm.controls['propertyType'].value,
-      0, 0,
+      this.marker.position.lat,
+      this.marker.position.lng,
       this.propertyForm.controls['standSize'].value,
-      this.propertyForm.controls['propertySize'].value
+      this.propertyForm.controls['propertySize'].value,
+
     );
 
     console.log(this.property);
     this.dataService.addProperty(this.property).subscribe({
       next: (res) => {
         this.loader.hideLoader();
-
+        this.router.navigate(['properties']);
       },
       error: (error) => {
-
+        this.loader.hideLoader();
+        this.errorDialog.showError(`there was an error adding the property. \n ${error.message}` );
       }
     })
   }
 
   onUpload( event: FileSelectEvent ){
     console.log("UPLOAD EVENT: " +event.files[0].name);
-    const formData = new FormData();
-    formData.append('image', event.files[0]);
-    this.chosenImage = event.files[0];
+
+  }
+
+  mapClicked(event: google.maps.MapMouseEvent){
+    console.log(event.latLng?.toJSON());
+
+    if (event.latLng != undefined) {
+
+      this.geocodingService.geocodeLatLng({lat: event.latLng?.lat(), lng: event.latLng?.lng()}).then((res: GeocoderResponse)=> {
+        if (res.status === 'OK' && res.results?.length) {
+          const value = res.results[0];
+          this.propertyForm.patchValue({
+            address: value.formatted_address
+          })
+        }
+      });
+
+      this.marker = {
+        position : {lat: event.latLng?.lat(), lng: event.latLng?.lng()}
+      }
+    }
+
   }
 
 }

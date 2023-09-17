@@ -48,7 +48,7 @@
     },
     {
       "id": 4,
-      "deleted": false,
+      "deleted": true,
       "description": "Ornare massa eget egestas purus viverra accumsan. Justo nec ultrices dui sapien eget mi proin sed.",
       "image": "https://picsum.photos/id/17/300/200",
       "address": "189 Kirkness lane, Pierre van Ryneveld Park, Centurion, South Africa",
@@ -75,13 +75,13 @@
     {
       "id": 6,
       "deleted": false,
-      "description": "Cursus in hac habitasse platea. Quam adipiscing vitae proin sagittis. Etiam tempor orci eu lobortis elementum nibh.",
+      "description": "Cursus in hac habitasse platea. Quam adipiscing vitae proin sagittis. Etiam tempor orci eu lobortis elementum nibh. Added to description",
       "image": "https://picsum.photos/id/15/300/200",
       "address": "189 Kirkness lane, Pierre van Ryneveld Park, Centurion, South Africa",
       "unit_identifier": "6",
-      "property_type": "Sectional Title",
-      "gps_lat": -25.85135,
-      "gps_lang": 28.23287,
+      "property_type": "Section Title",
+      "gps_lat": -25.846061254887186,
+      "gps_lang": 28.241066830749492,
       "stand_size": "35",
       "property_size": "40"
     },
@@ -126,7 +126,7 @@
     },
     {
       "id": 10,
-      "deleted": false,
+      "deleted": true,
       "description": "Nunc aliquet bibendum enim facilisis gravida. Arcu odio ut sem nulla pharetra diam sit amet. Elit ut aliquam purus sit. ",
       "image": "https://picsum.photos/id/12/300/200",
       "address": "189 Kirkness lane, Pierre van Ryneveld Park, Centurion, South Africa",
@@ -139,33 +139,15 @@
     },
     {
       "deleted": false,
-      "description": "Test description",
-      "image": "",
-      "address": "189 Kirkness lane, Pierre van Ryneveld Park, Centurion, South Africa",
-      "unit_identifier": "11",
-      "property_type": "Section Title",
-      "property_size": 90,
-      "stand_size": 50,
-      "gps_lat": 0,
-      "gps_lang": 0,
-      "id": 11
-    },
-    {
-      "deleted": false,
-      "description": "Test with image",
-      "image": {
-        "objectURL": {
-          "changingThisBreaksApplicationSecurity": "blob:http://localhost:4200/7618f208-c29b-4bf3-8a92-b0a00867855d"
-        }
-      },
-      "address": "189 Kirkness lane, Pierre van Ryneveld, Centurion, South Africa",
+      "description": "This is a new property",
+      "address": "189 Krikness lane, Pierre van Ryneveld, Centurion, South Africa",
       "unit_identifier": "12",
       "property_type": "Section Title",
-      "property_size": 60,
+      "property_size": 50,
       "stand_size": 40,
-      "gps_lat": 0,
-      "gps_lang": 0,
-      "id": 12
+      "gps_lat": -25.856076231697177,
+      "gps_lang": 28.236241379394478,
+      "id": 11
     }
   ]
 }

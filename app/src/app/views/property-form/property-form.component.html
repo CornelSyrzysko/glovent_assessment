@@ -1,52 +1,64 @@
-<div class="flex flex-space_between">
-  <h2 *ngIf="isUpdate">EDIT PROPERTY DETAILS</h2>
-  <h2 *ngIf="!isUpdate">ADD A NEW PROPERTY</h2>
-  <button pButton class="p-button-danger cancelBtn" appBackButton label="Cancel"></button>
+<div class="margin-20 narrowView">
+  <div class="flex flex-space_between">
+    <h2 *ngIf="isUpdate">EDIT PROPERTY DETAILS</h2>
+    <h2 *ngIf="!isUpdate">ADD A NEW PROPERTY</h2>
+    <span>
+
+      <button pButton class="p-button-success btn" label="Save" (click)="submitProperty()"></button>
+      <button pButton class="p-button-danger btn" appBackButton label="Cancel"></button>
+    </span>
+
+  </div>
+
+  <form [formGroup]="propertyForm">
+    <div class="flex flex-row">
+      <p-image *ngIf="property" [src]="property.image" alt="Image" width="250" [preview]="true"></p-image>
+      <!-- <p-fileUpload class="imageUpload" name="demo[]" (onSelect)="onUpload($event)"
+        [showUploadButton]="false"  [multiple]="false" accept="image/*">
+      </p-fileUpload> -->
+    </div>
+
+    <div class="flex flex-column">
+      <label>Description</label>
+      <textarea rows="3"  pInputTextarea  formControlName="description"></textarea>
+    </div>
+    <div class="flex flex-column">
+      <label>Unit</label>
+      <input pInputText formControlName="unit" class="ng-invalid">
+    </div>
+    <div class="flex flex-space_between">
+      <div class="flex flex-column">
+        <label>Property Type</label>
+        <p-dropdown [options]="propertyTypes" formControlName="propertyType"></p-dropdown>
+      </div>
+      <div class="flex flex-column">
+        <label>Stand Size</label>
+        <p-inputNumber formControlName="standSize" inputId="minmaxfraction" mode="decimal"
+          [minFractionDigits]="2" [maxFractionDigits]="5"> </p-inputNumber>
+      </div>
+      <div class="flex flex-column">
+        <label>Property Size</label>
+        <p-inputNumber formControlName="propertySize" inputId="minmaxfraction" mode="decimal"
+          [minFractionDigits]="2" [maxFractionDigits]="5"> </p-inputNumber>
+      </div>
+    </div>
+
+    <div class="flex flex-column">
+      <label>Address</label>
+      <input pInputText formControlName="address">
+    </div>
+
+    <div class="flex flex-column">
+      <label>Map View</label>
+      <div class="map">
+        <google-map [options]="mapOptions" (mapClick)="mapClicked($event)" width="100%">
+          <map-marker *ngIf="marker" [position]="marker.position"></map-marker>
+        </google-map>
+      </div>
+    </div>
+
+
+
+  </form>
 </div>
 
-
-
-<form [formGroup]="propertyForm">
-
-  <div class="flex flex-column">
-
-  </div>
-  <p-fileUpload name="demo[]" (onSelect)="onUpload($event)" [showUploadButton]="false"
-    [multiple]="false" accept="image/*">
-  </p-fileUpload>
-
-  <div class="flex flex-column">
-    <label>Description</label>
-    <textarea rows="3"  pInputTextarea  formControlName="description"></textarea>
-  </div>
-  <div class="flex flex-column">
-    <label>Unit</label>
-    <input pInputText formControlName="unit">
-  </div>
-  <div class="flex flex-column">
-    <label>Property Type</label>
-    <p-dropdown [options]="propertyTypes" formControlName="propertyType"></p-dropdown>
-  </div>
-  <div class="flex flex-column">
-    <label>Stand Size</label>
-    <p-inputNumber formControlName="standSize" inputId="minmaxfraction" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"> </p-inputNumber>
-  </div>
-  <div class="flex flex-column">
-    <label>Property Size</label>
-    <p-inputNumber formControlName="propertySize" inputId="minmaxfraction" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"> </p-inputNumber>
-  </div>
-  <div class="flex flex-column">
-    <label>Address</label>
-    <input pInputText formControlName="address">
-  </div>
-
-  <div class="map">
-    <google-map [options]="mapOptions">
-      <map-marker [position]="marker.position"></map-marker>
-    </google-map>
-  </div>
-
-  <button pButton class="p-button-success" label="Save" (click)="submitProperty()"></button>
-
-
-</form>

@@ -2,7 +2,7 @@ export class Property {
   id?: number;
   deleted?: boolean;
   description?: string;
-  image?: File;
+  image?: string;
   address?: string;
   unit_identifier?: string;
   property_type?: PropertyType;
@@ -12,7 +12,7 @@ export class Property {
   property_size?: string;
 
   constructor( deleted: boolean, description: string,
-    image: File, address: string, unit_identifier: string,
+    image: string, address: string, unit_identifier: string,
     property_type: PropertyType, gps_lat: number, gps_lang: number,
     stand_size: string, property_size: string
   ){

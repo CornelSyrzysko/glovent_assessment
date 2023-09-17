@@ -6,6 +6,11 @@ body {
   font-family: var(--font-family);
 }
 
+ body{
+  margin: 0px;
+  padding: 0px;
+}
+
 .flex{
   display: flex;
 
@@ -24,3 +29,11 @@ body {
   }
 }
 
+.margin-20{
+  margin: 20px
+}
+
+.narrowView {
+  min-width: 600px;
+  margin: 20px 15% 20px 15%;
+}

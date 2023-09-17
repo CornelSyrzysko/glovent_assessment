@@ -6,6 +6,8 @@ import { Property } from '../../models/property';
 import { ConfirmationService, MessageService, ConfirmEventType } from 'primeng/api';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { ErrorDialogService } from 'src/app/components/error-dialog/error-dialog.service';
+import { DomSanitizer } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-properties-view',
@@ -35,7 +37,8 @@ export class PropertiesViewComponent {
     private router: Router,
     private confirmationService: ConfirmationService,
     private loader: LoaderService,
-    private errorDialog: ErrorDialogService
+    private errorDialog: ErrorDialogService,
+    private _sanitizer: DomSanitizer
     ) {}
 
   ngOnInit() {
@@ -120,5 +123,6 @@ export class PropertiesViewComponent {
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
+
 
 }

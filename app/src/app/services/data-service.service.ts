@@ -2,13 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { Property } from '../models/property';
 import { environment } from 'src/environments/environment';
+import { FileUpload } from 'primeng/fileupload';
+import { Observable, finalize } from 'rxjs';
+// import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    // private storage: AngularFireStorage
+    ) { }
 
   getProperties() {
     return this.http.get<Property[]>(`${environment.apiUrl}/properties`);
@@ -36,6 +41,25 @@ export class DataService {
     // 'soft delete' where the element won't be visible to the user, but still be present on
     // the database.
     return this.http.put<Property>(`${environment.apiUrl}/properties/${property.id}`, {...property})
+  }
+
+  uploadFileToFirebase(fileUpload: FileUpload) {
+    // const filePath = `uploads/${fileUpload.files[0].name}`;
+    // const storageRef = this.storage.ref(filePath);
+    // const uploadTask = this.storage.upload(filePath, fileUpload.files[0]);
+    // var imageUrl;
+    // uploadTask.snapshotChanges().pipe(
+    //   finalize(() => {
+    //     storageRef.getDownloadURL().subscribe(downloadURL => {
+    //       fileUpload.url = downloadURL;
+    //       fileUpload.name = fileUpload.files[0].name;
+    //       imageUrl = downloadURL;
+    //       // this.saveFileData(fileUpload);
+    //     });
+    //   })
+    // ).subscribe();
+
+    // return imageUrl;
   }
 
 }
