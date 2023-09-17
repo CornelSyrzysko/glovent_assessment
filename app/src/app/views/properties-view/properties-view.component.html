@@ -4,7 +4,7 @@
     <input type="text" pInputText [value]="searchValue" (input)="onInput($event)">
   </div>
 
-  <button pButton pRipple label="Add" (click)="addProperty()"
+  <button pButton pRipple label="Add" [routerLink]="['/add-property']"
    class="p-button-success addBtn"></button>
 </div>
 
@@ -35,7 +35,7 @@
         <td>{{ property.stand_size }}m<sup>2</sup></td>
         <td>{{ property.property_size }}m<sup>2</sup></td>
         <td><p-button styleClass="p-button-link"
-          (onClick)="editProperty(property.id)">Edit</p-button></td>
+          [routerLink]="['/edit-property', property.id]">Edit</p-button></td>
         <td><p-button styleClass="p-button-link"
           (onClick)="deleteProperty(property)">Delete</p-button></td>
       </tr>

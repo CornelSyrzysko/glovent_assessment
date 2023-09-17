@@ -1,13 +1,24 @@
-<h2 *ngIf="isUpdate">EDIT PROPERTY DETAILS</h2>
-<h2 *ngIf="!isUpdate">ADD A NEW PROPERTY</h2>
+<div class="flex flex-space_between">
+  <h2 *ngIf="isUpdate">EDIT PROPERTY DETAILS</h2>
+  <h2 *ngIf="!isUpdate">ADD A NEW PROPERTY</h2>
+  <button pButton class="p-button-danger cancelBtn" appBackButton label="Cancel"></button>
+</div>
+
+
 
 <form [formGroup]="propertyForm">
 
   <div class="flex flex-column">
-    <label>Description</label>
-    <textarea rows="5" cols="30" pInputTextarea  formControlName="description"></textarea>
-  </div>
 
+  </div>
+  <p-fileUpload name="demo[]" (onSelect)="onUpload($event)" [showUploadButton]="false"
+    [multiple]="false" accept="image/*">
+  </p-fileUpload>
+
+  <div class="flex flex-column">
+    <label>Description</label>
+    <textarea rows="3"  pInputTextarea  formControlName="description"></textarea>
+  </div>
   <div class="flex flex-column">
     <label>Unit</label>
     <input pInputText formControlName="unit">
@@ -29,9 +40,13 @@
     <input pInputText formControlName="address">
   </div>
 
-  <google-map [options]="mapOptions">
-    <map-marker [position]="marker.position"></map-marker>
- </google-map>
+  <div class="map">
+    <google-map [options]="mapOptions">
+      <map-marker [position]="marker.position"></map-marker>
+    </google-map>
+  </div>
+
+  <button pButton class="p-button-success" label="Save" (click)="submitProperty()"></button>
 
 
 </form>

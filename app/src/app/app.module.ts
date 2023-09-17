@@ -8,6 +8,7 @@ import { DataInterceptor } from './services/data-interceptor.service';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { PropertiesViewComponent } from './views/properties-view/properties-view.component';
 import { PropertyFormComponent } from './views/property-form/property-form.component';
+import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GoogleMapsModule } from '@angular/google-maps'
 
@@ -18,6 +19,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { FileUploadModule } from 'primeng/fileupload';
 
 import { DynamicDialogModule, DialogService } from 'primeng/dynamicdialog';
 import { ConfirmationService } from 'primeng/api';
@@ -26,6 +28,7 @@ import { ConfirmationService } from 'primeng/api';
 import { CamelToTitlePipe } from './helpers/camel-to-title.pipe';
 import { LoaderComponent } from './components/loader/loader.component';
 import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
+import { BackButtonDirective } from './directives/back-button.directive';
 
 
 @NgModule({
@@ -36,15 +39,17 @@ import { ErrorDialogComponent } from './components/error-dialog/error-dialog.com
     PropertyFormComponent,
     CamelToTitlePipe,
     LoaderComponent,
-    ErrorDialogComponent
+    ErrorDialogComponent,
+    BackButtonDirective
   ],
   imports: [
+    AppRoutingModule,
     FormsModule,
     HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
     ReactiveFormsModule,
+    RouterModule,
     GoogleMapsModule,
 
     //all primeNG Modules
@@ -55,7 +60,8 @@ import { ErrorDialogComponent } from './components/error-dialog/error-dialog.com
     InputNumberModule,
     InputTextareaModule,
     ConfirmDialogModule,
-    DynamicDialogModule
+    DynamicDialogModule,
+    FileUploadModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

@@ -8,7 +8,8 @@ const routes: Routes = [
   { path: '', redirectTo: "/dashboard", pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'properties', component: PropertiesViewComponent },
-  { path: 'add-property/:id', component: PropertyFormComponent }
+  { path: 'add-property', component: PropertyFormComponent },
+  { path: 'edit-property/:id', component: PropertyFormComponent }
 ];
 
 @NgModule({

@@ -8,31 +8,31 @@
   ],
   "properties": [
     {
-        "id": 1,
-        "deleted": true,
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-        "image": "https://picsum.photos/id/20/300/200",
-        "address": "189 Kirkness lane, Pierre van Ryneveld Park, Centurion, South Africa",
-        "unit_identifier": "1",
-        "property_type": "Sectional Title",
-        "gps_lat": -25.823478,
-        "gps_lang": 28.223444,
-        "stand_size": "35",
-        "property_size": "40"
+      "id": 1,
+      "deleted": true,
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "image": "https://picsum.photos/id/20/300/200",
+      "address": "189 Kirkness lane, Pierre van Ryneveld Park, Centurion, South Africa",
+      "unit_identifier": "1",
+      "property_type": "Sectional Title",
+      "gps_lat": -25.823478,
+      "gps_lang": 28.223444,
+      "stand_size": "35",
+      "property_size": "40"
     },
     {
-        "id": 2,
-        "deleted": true,
-        "description": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        "image": "https://picsum.photos/id/19/300/200",
-        "address": "189 Kirkness lane, Pierre van Ryneveld Park, Centurion, South Africa",
-        "unit_identifier": "2",
-        "property_type": "Sectional Title",
-        "gps_lat": -25.889078,
-        "gps_lang": 28.890044,
-        "stand_size": "35",
-        "property_size": "40"
-      },
+      "id": 2,
+      "deleted": true,
+      "description": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "image": "https://picsum.photos/id/19/300/200",
+      "address": "189 Kirkness lane, Pierre van Ryneveld Park, Centurion, South Africa",
+      "unit_identifier": "2",
+      "property_type": "Sectional Title",
+      "gps_lat": -25.889078,
+      "gps_lang": 28.890044,
+      "stand_size": "35",
+      "property_size": "40"
+    },
     {
       "id": 3,
       "deleted": true,
@@ -53,11 +53,11 @@
       "image": "https://picsum.photos/id/17/300/200",
       "address": "189 Kirkness lane, Pierre van Ryneveld Park, Centurion, South Africa",
       "unit_identifier": "4",
-      "property_type": "Sectional Title",
+      "property_type": "Full Title",
       "gps_lat": -25.85135,
       "gps_lang": 28.23287,
       "stand_size": "35",
-      "property_size": "40"
+      "property_size": 45
     },
     {
       "id": 5,
@@ -136,6 +136,36 @@
       "gps_lang": 28.236942,
       "stand_size": "35",
       "property_size": "40"
+    },
+    {
+      "deleted": false,
+      "description": "Test description",
+      "image": "",
+      "address": "189 Kirkness lane, Pierre van Ryneveld Park, Centurion, South Africa",
+      "unit_identifier": "11",
+      "property_type": "Section Title",
+      "property_size": 90,
+      "stand_size": 50,
+      "gps_lat": 0,
+      "gps_lang": 0,
+      "id": 11
+    },
+    {
+      "deleted": false,
+      "description": "Test with image",
+      "image": {
+        "objectURL": {
+          "changingThisBreaksApplicationSecurity": "blob:http://localhost:4200/7618f208-c29b-4bf3-8a92-b0a00867855d"
+        }
+      },
+      "address": "189 Kirkness lane, Pierre van Ryneveld, Centurion, South Africa",
+      "unit_identifier": "12",
+      "property_type": "Section Title",
+      "property_size": 60,
+      "stand_size": 40,
+      "gps_lat": 0,
+      "gps_lang": 0,
+      "id": 12
     }
   ]
 }
