@@ -12,10 +12,10 @@
 
   <form [formGroup]="propertyForm">
     <div class="flex flex-row">
-      <p-image *ngIf="property" [src]="property.image" alt="Image" width="250" [preview]="true"></p-image>
-      <!-- <p-fileUpload class="imageUpload" name="demo[]" (onSelect)="onUpload($event)"
+      <p-image *ngIf="property" [src]="'data:image/jpg;base64,'+property.image" alt="Image" width="250" [preview]="true"></p-image>
+      <p-fileUpload class="imageUpload" name="demo[]" (onSelect)="onUpload($event)"
         [showUploadButton]="false"  [multiple]="false" accept="image/*">
-      </p-fileUpload> -->
+      </p-fileUpload>
     </div>
 
     <div class="flex flex-column">

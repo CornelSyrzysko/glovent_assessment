@@ -1,7 +1,7 @@
 <div class="margin-20 ">
   <div class="flex flex-space_between">
     <h2>VIEW PROPERTIES</h2>
-    <p-button label="Back to Dashboard" styleClass="p-button-link" appBackButton></p-button>
+    <p-button label="Back to Dashboard" styleClass="p-button-link" [routerLink]="['/dashboard']"></p-button>
   </div>
   <div class="flex flex-space_between ">
     <div class="flex flex-column gap">
@@ -33,7 +33,7 @@
       <ng-template pTemplate="body" let-property>
         <tr>
           <td>{{ property.id }}</td>
-          <td><img [src]="property.image" class="shadow-4"></td>
+          <td><img [src]="'data:image/jpg;base64,'+property.image" class="shadow-4"></td>
           <td>{{ property.description }}</td>
           <td>{{ property.address }}</td>
           <td>{{ property.unit_identifier }}</td>

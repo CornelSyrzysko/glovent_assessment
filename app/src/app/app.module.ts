@@ -41,8 +41,6 @@ import { AngularFireModule, FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
 
-
-
 @NgModule({
   declarations: [
     AppComponent,

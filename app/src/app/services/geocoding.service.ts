@@ -23,10 +23,4 @@ export class GeocodingService {
       });
     });
   }
-
-  // Takes a typed address and return coordinates
-  getLocation(term: string): Observable<GeocoderResponse> {
-    const url = `https://maps.google.com/maps/api/geocode/json?address=${term}&sensor=false&key=${environment.googleApiKey}`;
-    return this.http.get<GeocoderResponse>(url);
-  }
 }

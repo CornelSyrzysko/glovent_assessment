@@ -32,9 +32,6 @@ export class PropertyFormComponent {
     "Apartment",
     "Office"
   ];
-
-  chosenImage?: string;
-
   // we'll be using the same component for update and add.
   // variable to control certain elements depending on state
   isUpdate: boolean = true;
@@ -45,11 +42,9 @@ export class PropertyFormComponent {
   }
   marker: any;
 
-  geocoder?: google.maps.Geocoder;
-
   @ViewChild('address')
-  public addressElementRef!: ElementRef;
-  @ViewChild('gmap') public map!: GoogleMap;
+  public addressElementRef!: ElementRef; // address input field. used for places
+  @ViewChild('gmap') public map!: GoogleMap; // google maps html element. used for places
 
 
   constructor(private route: ActivatedRoute,
@@ -78,6 +73,7 @@ export class PropertyFormComponent {
       propertyType: new FormControl(this.property?.property_type??"", [ Validators.required ]),
       standSize: new FormControl(this.property?.stand_size??"", [ Validators.required ]),
       propertySize: new FormControl(this.property?.property_size??"", [ Validators.required ]),
+      image: new FormControl(this.property?.image??"")
     });
   }
 
@@ -86,7 +82,7 @@ export class PropertyFormComponent {
     let autocomplete = new google.maps.places.Autocomplete(
       this.addressElementRef.nativeElement
     );
-    // Align search box to center
+    // Align search box to top
     this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(
       this.addressElementRef.nativeElement
     );
@@ -100,12 +96,11 @@ export class PropertyFormComponent {
           return;
         }
 
-        console.log({ place }, place.geometry.location?.lat());
-
         //set latitude, longitude and zoom
         this.propertyForm.patchValue({
           address: place.formatted_address
-        })
+        });
+        // set marker to selected address
         this.marker = {
           position: {lat: place.geometry.location?.lat(),
             lng:place.geometry.location?.lng()
@@ -125,13 +120,14 @@ export class PropertyFormComponent {
         next: (res)=>{
           this.property = res;
 
-          this.propertyForm.setValue({
+          this.propertyForm.patchValue({
             description: this.property.description,
             address: this.property.address,
             unit: this.property.unit_identifier,
             propertyType: this.property.property_type,
             standSize: this.property.stand_size,
-            propertySize: this.property.property_size
+            propertySize: this.property.property_size,
+            image: this.property.image
           });
           this.marker = {
             position : {lat: this.property.gps_lat!, lng: this.property.gps_lang!}
@@ -161,7 +157,7 @@ export class PropertyFormComponent {
         this.addProperty();
       }
     } else {
-      console.warn('form invalid')
+      this.errorDialog.showError('Some required field are empty. Please fill all fields before savigng')
     }
 
   }
@@ -175,6 +171,7 @@ export class PropertyFormComponent {
     this.property.property_type = this.propertyForm.controls['propertyType'].value;
     this.property.gps_lat = this.marker.position.lat;
     this.property.gps_lang = this.marker.position.lng;
+    this.property.image = this.propertyForm.controls['image'].value;
 
     this.loader.showLoader();
     this.subscriptions.push(
@@ -196,7 +193,7 @@ export class PropertyFormComponent {
     this.property = new Property(
       false,
       this.propertyForm.controls['description'].value,
-      this.chosenImage!,
+      this.propertyForm.controls['image'].value,
       this.propertyForm.controls['address'].value,
       this.propertyForm.controls['unit'].value,
       this.propertyForm.controls['propertyType'].value,
@@ -222,8 +219,21 @@ export class PropertyFormComponent {
 
   onUpload( event: FileSelectEvent ){
 
-    var url = this.dataService.uploadFileToFirebase(event.files[0]);
-    console.log('downloadurl: ' + url);
+    var reader = new FileReader();
+
+    reader.onload =this.handleFile.bind(this);
+
+    reader.readAsBinaryString(event.files[0]);
+
+    // var url = this.dataService.uploadFileToFirebase(event.files[0]);
+    // console.log('downloadurl: ' + url);
+  }
+
+  handleFile(event: any) {
+    var binaryString = event.target.result;
+    this.propertyForm.patchValue({
+      image: btoa(binaryString)
+    });
   }
 
   mapClicked(event: google.maps.MapMouseEvent){
