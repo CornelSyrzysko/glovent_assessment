@@ -5,6 +5,18 @@ import { environment } from 'src/environments/environment';
 import { FileUpload } from 'primeng/fileupload';
 import { Observable, finalize } from 'rxjs';
 // import { AngularFireStorage } from '@angular/fire/compat/storage';
+// import {
+//   Storage,
+//   ref,
+//   deleteObject,
+//   uploadBytes,
+//   uploadString,
+//   uploadBytesResumable,
+//   percentage,
+//   getDownloadURL,
+// } from '@angular/fire/storage';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +24,8 @@ import { Observable, finalize } from 'rxjs';
 export class DataService {
 
   constructor(private http: HttpClient,
-    // private storage: AngularFireStorage
-    ) { }
+    // private storage: Storage
+  ) { }
 
   getProperties() {
     return this.http.get<Property[]>(`${environment.apiUrl}/properties`);
@@ -43,23 +55,17 @@ export class DataService {
     return this.http.put<Property>(`${environment.apiUrl}/properties/${property.id}`, {...property})
   }
 
-  uploadFileToFirebase(fileUpload: FileUpload) {
-    // const filePath = `uploads/${fileUpload.files[0].name}`;
-    // const storageRef = this.storage.ref(filePath);
-    // const uploadTask = this.storage.upload(filePath, fileUpload.files[0]);
-    // var imageUrl;
-    // uploadTask.snapshotChanges().pipe(
-    //   finalize(() => {
-    //     storageRef.getDownloadURL().subscribe(downloadURL => {
-    //       fileUpload.url = downloadURL;
-    //       fileUpload.name = fileUpload.files[0].name;
-    //       imageUrl = downloadURL;
-    //       // this.saveFileData(fileUpload);
-    //     });
-    //   })
-    // ).subscribe();
 
-    // return imageUrl;
+  //Upload a file to firebase storage bucket and return the download url
+  async uploadFileToFirebase(image: File) {
+    // const filePath = `uploads/${image.name}`;
+    // const storageRef = ref(this.storage, filePath);
+    // const task = uploadBytesResumable(storageRef, image);
+    // await task;
+    // return await getDownloadURL(storageRef);
+
+
+
   }
 
 }

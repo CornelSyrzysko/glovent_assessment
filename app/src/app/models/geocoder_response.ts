@@ -1,4 +1,4 @@
-
+// response from the google geocoder api
 export class GeocoderResponse {
   status: string;
   error_message?: string;

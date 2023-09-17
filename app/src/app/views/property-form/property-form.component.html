@@ -38,20 +38,16 @@
       </div>
       <div class="flex flex-column">
         <label>Property Size</label>
-        <p-inputNumber formControlName="propertySize" inputId="minmaxfraction" mode="decimal"
+        <p-inputNumber formControlName="propertySize"  mode="decimal"
           [minFractionDigits]="2" [maxFractionDigits]="5"> </p-inputNumber>
       </div>
     </div>
 
     <div class="flex flex-column">
       <label>Address</label>
-      <input pInputText formControlName="address">
-    </div>
-
-    <div class="flex flex-column">
-      <label>Map View</label>
+      <input pInputText formControlName="address" class="addressInput" #address>
       <div class="map">
-        <google-map [options]="mapOptions" (mapClick)="mapClicked($event)" width="100%">
+        <google-map [options]="mapOptions" (mapClick)="mapClicked($event)" width="100%"  #gmap>
           <map-marker *ngIf="marker" [position]="marker.position"></map-marker>
         </google-map>
       </div>

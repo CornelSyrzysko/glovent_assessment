@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, NgZone, ViewChild,  } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Property } from 'src/app/models/property';
@@ -7,15 +7,13 @@ import { PropertyType } from '../../models/property';
 import {} from 'googlemaps';
 import { LoaderService } from 'src/app/components/loader/loader.service';
 import { ErrorDialogService } from 'src/app/components/error-dialog/error-dialog.service';
-import { FileSelectEvent } from 'primeng/fileupload';
+import { FileSelectEvent, FileUpload } from 'primeng/fileupload';
 import { MessageService } from 'primeng/api';
 import { GeocodingService } from 'src/app/services/geocoding.service';
 import { GeocoderResponse } from 'src/app/models/geocoder_response';
-
-interface UploadEvent {
-  originalEvent: Event;
-  files: File[];
-}
+import { Subscription } from 'rxjs';
+import { GoogleMap } from '@angular/google-maps';
+import { ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-property-form',
@@ -24,6 +22,7 @@ interface UploadEvent {
   providers: [ MessageService ]
 })
 export class PropertyFormComponent {
+  subscriptions: Subscription[] = [];
   propertyForm!: FormGroup;
   propertyId? : string;
   property! : Property;
@@ -48,13 +47,19 @@ export class PropertyFormComponent {
 
   geocoder?: google.maps.Geocoder;
 
+  @ViewChild('address')
+  public addressElementRef!: ElementRef;
+  @ViewChild('gmap') public map!: GoogleMap;
+
+
   constructor(private route: ActivatedRoute,
     private dataService: DataService,
     private messageService: MessageService,
     private loader: LoaderService,
     private errorDialog: ErrorDialogService,
     private router: Router,
-    private geocodingService: GeocodingService
+    private geocodingService: GeocodingService,
+    private ngZone: NgZone
   ){}
 
   ngOnInit() {
@@ -76,36 +81,76 @@ export class PropertyFormComponent {
     });
   }
 
-  getPropertyDetails(propertyId: string) {
-    this.loader.showLoader();
-    this.dataService.getPropertyById(propertyId).subscribe({
-      next: (res)=>{
-        this.property = res;
+  ngAfterViewInit(): void {
+    // Binding autocomplete to search input control
+    let autocomplete = new google.maps.places.Autocomplete(
+      this.addressElementRef.nativeElement
+    );
+    // Align search box to center
+    this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(
+      this.addressElementRef.nativeElement
+    );
+    autocomplete.addListener('place_changed', () => {
+      this.ngZone.run(() => {
+        //get the place result
+        let place: google.maps.places.PlaceResult = autocomplete.getPlace();
 
-        this.propertyForm.setValue({
-          description: this.property.description,
-          address: this.property.address,
-          unit: this.property.unit_identifier,
-          propertyType: this.property.property_type,
-          standSize: this.property.stand_size,
-          propertySize: this.property.property_size
-        });
+        //verify result
+        if (place.geometry === undefined || place.geometry === null) {
+          return;
+        }
+
+        console.log({ place }, place.geometry.location?.lat());
+
+        //set latitude, longitude and zoom
+        this.propertyForm.patchValue({
+          address: place.formatted_address
+        })
         this.marker = {
-          position : {lat: this.property.gps_lat!, lng: this.property.gps_lang!}
+          position: {lat: place.geometry.location?.lat(),
+            lng:place.geometry.location?.lng()
+          }
         }
         this.mapOptions = {
-          center: this.marker.position ,
-          zoom : 14
+          center: this.marker.position
         }
+      });
+    });
+  }
 
-        this.loader.hideLoader();
-      },
-      error: (error)=>{
-        this.errorDialog.showError("Could not find property. Please add a new one.");
-        this.isUpdate = false;
-        this.loader.hideLoader();
-      }
-    })
+  getPropertyDetails(propertyId: string) {
+    this.loader.showLoader();
+    this.subscriptions.push(
+      this.dataService.getPropertyById(propertyId).subscribe({
+        next: (res)=>{
+          this.property = res;
+
+          this.propertyForm.setValue({
+            description: this.property.description,
+            address: this.property.address,
+            unit: this.property.unit_identifier,
+            propertyType: this.property.property_type,
+            standSize: this.property.stand_size,
+            propertySize: this.property.property_size
+          });
+          this.marker = {
+            position : {lat: this.property.gps_lat!, lng: this.property.gps_lang!}
+          }
+          this.mapOptions = {
+            center: this.marker.position ,
+            zoom : 14
+          }
+
+          this.loader.hideLoader();
+        },
+        error: (error)=>{
+          this.errorDialog.showError("Could not find property. Please add a new one.");
+          this.isUpdate = false;
+          this.loader.hideLoader();
+        }
+      })
+    );
+
   }
 
   submitProperty() {
@@ -132,16 +177,18 @@ export class PropertyFormComponent {
     this.property.gps_lang = this.marker.position.lng;
 
     this.loader.showLoader();
-    this.dataService.updateProperty(this.property).subscribe({
-      next: (res) => {
-        this.loader.hideLoader();
-        this.router.navigate(['properties']);
-      },
-      error: (error) => {
-        this.loader.hideLoader();
-        this.errorDialog.showError(`Could not update dialog: \n ${error.message}`  );
-      }
-    })
+    this.subscriptions.push(
+      this.dataService.updateProperty(this.property).subscribe({
+        next: (res) => {
+          this.loader.hideLoader();
+          this.router.navigate(['properties']);
+        },
+        error: (error) => {
+          this.loader.hideLoader();
+          this.errorDialog.showError(`Could not update dialog: \n ${error.message}`  );
+        }
+      })
+    );
   }
 
   addProperty() {
@@ -159,28 +206,27 @@ export class PropertyFormComponent {
       this.propertyForm.controls['propertySize'].value,
 
     );
-
-    console.log(this.property);
-    this.dataService.addProperty(this.property).subscribe({
-      next: (res) => {
-        this.loader.hideLoader();
-        this.router.navigate(['properties']);
-      },
-      error: (error) => {
-        this.loader.hideLoader();
-        this.errorDialog.showError(`there was an error adding the property. \n ${error.message}` );
-      }
-    })
+    this.subscriptions.push(
+      this.dataService.addProperty(this.property).subscribe({
+        next: (res) => {
+          this.loader.hideLoader();
+          this.router.navigate(['properties']);
+        },
+        error: (error) => {
+          this.loader.hideLoader();
+          this.errorDialog.showError(`there was an error adding the property. \n ${error.message}` );
+        }
+      })
+    );
   }
 
   onUpload( event: FileSelectEvent ){
-    console.log("UPLOAD EVENT: " +event.files[0].name);
 
+    var url = this.dataService.uploadFileToFirebase(event.files[0]);
+    console.log('downloadurl: ' + url);
   }
 
   mapClicked(event: google.maps.MapMouseEvent){
-    console.log(event.latLng?.toJSON());
-
     if (event.latLng != undefined) {
 
       this.geocodingService.geocodeLatLng({lat: event.latLng?.lat(), lng: event.latLng?.lng()}).then((res: GeocoderResponse)=> {
@@ -197,6 +243,10 @@ export class PropertyFormComponent {
       }
     }
 
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
 }

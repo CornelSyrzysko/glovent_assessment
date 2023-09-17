@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { AppComponent } from './app.component';2
 import { DataInterceptor } from './services/data-interceptor.service';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { PropertiesViewComponent } from './views/properties-view/properties-view.component';
@@ -32,10 +32,13 @@ import { CamelToTitlePipe } from './helpers/camel-to-title.pipe';
 import { LoaderComponent } from './components/loader/loader.component';
 import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
 import { BackButtonDirective } from './directives/back-button.directive';
-// import { AngularFireModule } from '@angular/fire/compat';
-// import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
-// import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-// import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+// import { getStorage, provideStorage }
+// from '@angular/fire/storage';
+import { environment } from '../environments/environment';
+import { provideFirestore,getFirestore } from '@angular/fire/firestore';
+import { AngularFireModule, FIREBASE_OPTIONS } from '@angular/fire/compat';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
 
 
@@ -60,10 +63,13 @@ import { BackButtonDirective } from './directives/back-button.directive';
     ReactiveFormsModule,
     RouterModule,
     GoogleMapsModule,
+    // AngularFireModule.initializeApp(environment.firebase),
+    // provideFirebaseApp(() => initializeApp(environment.firebase)),
+
+    // provideStorage(() => getStorage()),
     // AngularFireModule.initializeApp(environment.firebaseConfig),
     // AngularFireDatabaseModule,
-    // AngularFirestoreModule,
-    // AngularFireStorageModule,
+    AngularFireStorageModule,
 
     //all primeNG Modules
     TableModule,
@@ -78,12 +84,14 @@ import { BackButtonDirective } from './directives/back-button.directive';
     ImageModule,
     MessagesModule,
     MessageModule,
+
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: DataInterceptor,
     multi: true
   },
+  { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
   DialogService, ConfirmationService
 ],
   bootstrap: [AppComponent]

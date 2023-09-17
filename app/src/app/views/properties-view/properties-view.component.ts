@@ -43,47 +43,47 @@ export class PropertiesViewComponent {
 
   ngOnInit() {
     this.loader.showLoader();
-    const subscription = this.trigger.subscribe(currentValue => { // since we are subscribing to something that might not end,
-      this.filterProperties(currentValue);
-    });
-    this.subscriptions.push(subscription);
+    this.subscriptions.push(
+      this.trigger.subscribe(currentValue => {
+        this.filterProperties(currentValue);
+      })
+    );
 
     this.getProperties();
   }
 
   getProperties() {
-    this.dataService.getProperties().subscribe({ // trigger the endpoint to get all the properties
-      next: (res)=> {
-        this.properties = res.filter((el)=>{return !el.deleted}); // only get the properties not marked as deleted
-                                                          // normally this filtering will be done by the backend
-        this.loader.hideLoader();
-        console.log('result: ' + this.properties);
-      },
-      error: (error) => { // if the api returns an error.
-        // this.isLoading = false;
-        this.errorMessage = error;
-        console.log(this.errorMessage);
-      }
-    });
+    this.subscriptions.push(
+      this.dataService.getProperties().subscribe({ // trigger the endpoint to get all the properties
+        next: (res)=> {
+          this.properties = res.filter((el)=>{return !el.deleted}); // only get the properties not marked as deleted
+                                                            // normally this filtering will be done by the backend
+          this.loader.hideLoader();
+        },
+        error: (error) => { // if the api returns an error.
+          this.errorMessage = error;
+        }
+      })
+    );
   }
 
-  // AIzaSyDnQa98YaobrBBL2FX_RX1iRPaLgs643qc
-
-
   onInput(e: any) {
-    this.inputValue.next(e.target.value);
+    this.inputValue.next(e.target.value); // trigger whenever a user types something into the search field.
   }
 
   filterProperties(value: string) {
     //this can also be done by filtering local data. Our backend allows for easy, effortless filtering so we'll use that
-    this.dataService.filterProperties(value).subscribe({
-      next: (res)=> {
-        this.properties = res.filter((el)=>{return !el.deleted});;
-      },
-      error: (error) => {
+    this.subscriptions.push(
+      this.dataService.filterProperties(value).subscribe({
+        next: (res)=> {
+          this.properties = res.filter((el)=>{return !el.deleted});;
+        },
+        error: (error) => {
+          this.errorDialog.showError('Something went wrong while trying to load the properties.');
+        }
+      })
+    );
 
-      }
-    })
   }
 
   editProperty(propertyID: number) {
@@ -91,7 +91,6 @@ export class PropertiesViewComponent {
   }
 
   deleteProperty(propertyDetails: Property) {
-    console.log('show confirmation');
     this.confirmationService.confirm({
       message: "Are you sure you want to delete this property?",
       header: "Delete Property",
@@ -99,17 +98,17 @@ export class PropertiesViewComponent {
       accept: () => {
         this.loader.showLoader();
         propertyDetails.deleted = true;
-        this.dataService.deleteProperty(propertyDetails).subscribe({
-          next: (res) => {
-            console.log('property deleted')
-            this.getProperties();
-          },
-          error: (error: Error) => {
-            console.error(`error message : ${error.message}`);
-            this.loader.hideLoader();
-            this.errorDialog.showError('Failed to delete property.')
-          }
-        })
+        this.subscriptions.push(
+          this.dataService.deleteProperty(propertyDetails).subscribe({
+            next: (res) => {
+              this.getProperties();
+            },
+            error: (error: Error) => {
+              this.loader.hideLoader();
+              this.errorDialog.showError('Failed to delete property.')
+            }
+          })
+        );
       }
     });
 
@@ -120,6 +119,7 @@ export class PropertiesViewComponent {
     this.router.navigate(['/add-property', 'add'])
   }
 
+  // it is good practice to unsubscribe from all subscriptions once the page is closed.
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }

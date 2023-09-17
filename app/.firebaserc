@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "glovent-assessment": {
+      "hosting": {
+        "app": [
+          "glovent-assessment"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "glovent-assessment"
+  }
+}
